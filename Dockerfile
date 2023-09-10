@@ -46,10 +46,17 @@ USER docker
 
 WORKDIR /docker/scripts/
 
-RUN DEBIAN_FRONTEND=noninteractive sudo apt-get update --yes --quiet && \
-    DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST && \
-    DEBIAN_FRONTEND=noninteractive sudo apt-get clean --yes && \
-    sudo rm --recursive --force /var/lib/apt/lists/*
+RUN echo "> DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST ..."
+RUN DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST 
+
+RUN echo "> DEBIAN_FRONTEND=noninteractive sudo apt-get update --yes --quiet ..."
+RUN DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST 
+
+RUN echo "> DEBIAN_FRONTEND=noninteractive sudo apt-get clean --yes ..."
+RUN DEBIAN_FRONTEND=noninteractive sudo apt-get clean --yes 
+
+RUN echo "> sudo rm --recursive --force /var/lib/apt/lists/* ..."
+RUN sudo rm --recursive --force /var/lib/apt/lists/*
 
 COPY docker-entrypoint.sh /docker/docker-entrypoint.sh
 
