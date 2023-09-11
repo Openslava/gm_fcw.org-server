@@ -5,3 +5,5 @@ Ubuntu	bionic	deb.sh
 Ubuntu	xenial	deb.sh
 Debian	stretch	deb.sh
 Debian	buster	deb.sh
+Debian	bullseye	deb.sh
+Debian	bookworm	deb.sh

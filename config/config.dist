@@ -18,7 +18,8 @@ DB_PASSWORD=changeme
 # for example), as reading the config again will give another value,
 # so it won't be the correct one for this variable, and you are not notified
 # of the first one.
-DB_ROOT_PASSWORD=${RANDOM}${RANDOM}${RANDOM}
+# DB_ROOT_PASSWORD=${RANDOM}${RANDOM}${RANDOM}
+DB_ROOT_PASSWORD=ThisIs4Testing
 
 # If you are sharing tomcat with other apps, you may want the stop scripts
 # to only stop freeciv-web and not the whole tomcat instance. Setup

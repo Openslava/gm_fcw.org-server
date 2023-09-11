@@ -260,11 +260,32 @@ pidof mysqld > /dev/null || start_svc mysql
 if [ -z "${DB_ROOT_PASSWORD}" ]; then
   echo "Will need the DB root password twice"
 fi
-sudo mysqladmin -u root -p"${DB_ROOT_PASSWORD}" create "${DB_NAME}"
+
+echo "==== SHOW DATABASES"
 sudo mysql -u root -p"${DB_ROOT_PASSWORD}" << EOF
-CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}',
-            '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}',
-            '${DB_USER}'@'::1'       IDENTIFIED BY '${DB_PASSWORD}';
+SHOW DATABASES;
+EOF
+
+
+echo "==== CREATE DATABASE IF NOT EXISTS ..."
+sudo mysql -u root -p"${DB_ROOT_PASSWORD}" << EOF
+CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+EOF
+
+echo "==== CREATE USER ..."
+sudo mysql -u root -p"${DB_ROOT_PASSWORD}" << EOF
+CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';
+EOF
+
+sudo mysql -u root -p"${DB_ROOT_PASSWORD}" << EOF
+CREATE USER IF NOT EXISTS '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}';
+EOF
+
+sudo mysql -u root -p"${DB_ROOT_PASSWORD}" << EOF
+CREATE USER IF NOT EXISTS '${DB_USER}'@'::1'       IDENTIFIED BY '${DB_PASSWORD}';
+EOF
+
+sudo mysql -u root -p"${DB_ROOT_PASSWORD}" << EOF
 GRANT ALL ON ${DB_NAME}.* TO '${DB_USER}'@'localhost',
                              '${DB_USER}'@'127.0.0.1',
                              '${DB_USER}'@'::1';
@@ -272,8 +293,14 @@ EOF
 
 echo "==== Preparing Tomcat ===="
 cd "${TOMCAT_HOME}"
+
+echo "==== setfacl webapps ..."
 sudo setfacl -m d:u:$(id -u):rwX,u:$(id -u):rwx webapps
+
+echo "==== crete subdirectories ..."
 mkdir -p webapps/data/{savegames/pbem,scorelogs,ranklogs}
+
+echo "==== setfacl webapps/data ..."
 setfacl -Rm d:u:tomcat8:rwX webapps/data
 
 echo "==== Building freeciv ===="

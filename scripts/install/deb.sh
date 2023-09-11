@@ -47,6 +47,7 @@ dependencies="\
   python3-wheel \
   sed \
   swapspace \
+  systemd \
   tar \
   unzip \
   zlib1g-dev \
@@ -93,15 +94,21 @@ sudo apt-mark hold msodbcsql17  containers-common || echo "workaround erred"
 
 # echo "Workaround #2 for msodbcsql17..."
 #workaround #2 for msodbcsql17...
-# sudo apt-get install -y libodbc1
-# sudo apt update
+sudo apt-get install -y libodbc1
+sudo apt update
 # Installs SQL drivers and tools
 # RUN ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev
-# sudo apt install unixodbc
-# curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+sudo apt install -y unixodbc
+sudo apt-get install -y gnupg
+sudo apt install -y curl
+
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+curl https://packages.microsoft.com/config/debian/10/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+
 # echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | sudo tee /etc/apt/sources.list.d/mssql-release.list
-# sudo apt update
-# sudo apt install msodbcsql17
+sudo apt update
+sudo ACCEPT_EULA=Y apt install -y  msodbcsql17
 
 echo "mysql setup..."
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password ${DB_ROOT_PASSWORD}"

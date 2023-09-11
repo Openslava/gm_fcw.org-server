@@ -46,10 +46,10 @@ USER docker
 
 WORKDIR /docker/scripts/
 
-RUN echo "> DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST ..."
-RUN DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST 
-
 RUN echo "> DEBIAN_FRONTEND=noninteractive sudo apt-get update --yes --quiet ..."
+RUN DEBIAN_FRONTEND=noninteractive sudo apt-get update --yes --quiet 
+
+RUN echo "> DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST ..."
 RUN DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST 
 
 RUN echo "> DEBIAN_FRONTEND=noninteractive sudo apt-get clean --yes ..."
